@@ -22,7 +22,7 @@ public class PswMD5 {
     }
 
     public static void main(String[] args) {// 测试用例
-        String md5_1 = password_md5("123456");
+        String md5_1 = password_md5("123456");// 密码有ASCII就够了
         String md5_2 = password_md5("123457");
         String md5_3 = password_md5("123456");
         System.out.println(md5_1);

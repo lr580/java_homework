@@ -4,7 +4,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class Entrypt {
+public class Encrypt {
     // NOPadding
     private static final String transormation = "AES/CBC/PKCS5Padding";
     private static final String key = "1437580lr_CZGv1.";// 默认密码

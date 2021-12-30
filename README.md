@@ -50,7 +50,7 @@
 
 总体概述：
 
-1. 实现mysql的数据录入、查询、删除、修改，不局限于题目要求，拓展通用性(设计包和类时使其快速能够适应其他数据表)，使得以后迁移应用到别的场合更方便
+1. 实现MySQL的数据录入、查询、删除、修改，不局限于题目要求，拓展通用性(设计包和类时使其快速能够适应其他数据表)，使得以后迁移应用到别的场合更方便
 
    
 
@@ -78,7 +78,7 @@
 3. 通用功能
 
    1. 单独增删改、显示所有
-   2. 条件设置(预设和自定义mysql语句)
+   2. 条件设置(预设和自定义MySQL语句)
    3. (可选)按格式批量添加、导入已有
    4. 使用帮助
    5. 操作日志记录
@@ -125,8 +125,21 @@
 
 plugin 功能
 
-- SignIn 登录
-- Entrypt 加解密
+- `SignIn` 登录
+- `Base64Plugin` Base64编码解码
+  - `public static String get(byte[] key)` 编码
+  - `public static byte[] from(String key)` 解码
+
+- `Encrypt` 加解密
+  - `public static byte[] fill(String psw)`
+  - `public static String encode(String ori[, String psw])` 
+  - `public static String decode(String ori[, String psw])` 失败返回 null
+
+- `PswMD5` MD5加密
+  - `public static String encrypt(String data)`
+  - `public static String password_md5(String psw)` 加盐
+
+- `Checker` 检验输入合法性等
 
 
 
@@ -146,7 +159,7 @@ ui 交互页面
 
 data/ 数据文件
 
-- user 账号密码，第一行账号第二行密码
+- `user.txt` 登录密码的AES加密，密码为类包里的默认密码
 
 
 
