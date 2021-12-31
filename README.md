@@ -143,11 +143,21 @@ create table if not exists `info` (
 
 存储的信息有：
 
+- `cnt` 累计建表数(下一次生成的表号由此决定)
 - `backups` 备份数目
 - `saved` 是否已保存临时表,是1否0
 - `main` 主表编号
 - `temp` 临时表编号
 - `a_x` $x$号表状态，默认为0，即正常，其他值是异常状态
+
+
+
+性质：
+
+- 所有操作在 `temp` 表进行，每次操作赋值 `saved=0`
+- 当 `saved=1` 时， `main` 表和 `temp` 表数据完全一致
+- 当保存操作时，复制 `temp` 表到 `main` 表，置 `saved=1`
+- 当还原/不保存时，复制 `main` 表到 `temp` 表，置 `saved=1`
 
 
 
@@ -157,7 +167,7 @@ create table if not exists `info` (
 
 - id
 - name
-- student\_id 字符串
+- student\_number 字符串 学号
 - major 字符串
 
 建表语句：
@@ -166,7 +176,7 @@ create table if not exists `info` (
 create table if not exists `student` (
     `id` int not null auto_increment, 
     `name` varchar(20) not null, 
-    `student_id` varchar(20) not null, 
+    `student_number` varchar(20) not null, 
     `major` varchar(20), 
     primary key(`id`)
 ) engine=InnoDB default charset utf8;
@@ -238,18 +248,18 @@ create table if not exists `score` (
 
 `plugin`包  通用功能
 
-- `Base64Plugin` Base64编码解码
+- `Base64Plugin` Base64编码解码类
   - `public static String get(byte[] key)` 编码
   - `public static byte[] from(String key)` 解码
-- `Encrypt` 加解密
+- `Encrypt` 加解密类
   - `public static byte[] fill(String psw)`
   - `public static String encode(String ori[, String psw])` 
   - `public static String decode(String ori[, String psw])` 失败返回 null
-- `PswMD5` MD5加密
+- `PswMD5` MD5加密类
   - `public static String encrypt(String data)`
   - `public static String password_md5(String psw)` 加盐
 - `Checker` 检验输入合法性等
-- `FileHelper` 文件操作
+- `FileHelper` 文件操作类
   - `public static String read(File/String f)` 失败null
   - `public static String[] readlines(File/String f)` 失败null
   - `public static boolean write(String t, File/String f)` 失败false
@@ -277,13 +287,14 @@ create table if not exists `score` (
   - `public static void create_database(String ip, String port, String db, String name, String psw)` 创建数据库(不存在时)
   - `public static boolean connect(String ip, String port, String db, String name, String psw, String cfg)` 按参数连接到数据库，返回是否成功
   - `public static boolean connect() ` 按配置文件连接到数据库
-- `Ctrl` 数据库控制操作
+- `Ctrl` 数据库控制操作类
   - `public static void raised(Exception e)` 输出报错信息到前台
   - `public static boolean run(String cmd)` 执行一般SQL语句
   - `public static boolean update(String cmd)` 执行更新SQL语句
   - `public static ResultSet query(String cmd)` 执行查询语句
   - `public static boolean exists(ResultSet res, String col, String key)` 查找结果某列是否有某值
   - `public static PreparedStatement pre(String cmd)` 创建一个预处理语句
+  - `public static int getv(ResultSet res, String col, String key, String value)` 得到结果中 `col` 列为 `key` 的这一行里面 `value` 列的值(`int`类型)
 
 
 
@@ -302,6 +313,9 @@ create table if not exists `score` (
 - `DbLoader` 数据库初始化和加载
   - `public static void checkinit() ` 检查并执行(若需要)初始化
   - `public static void cr_table(int x)` 建立第 $x$ 号表
+  - `public static void overwrite(int from, int to)` 用 from 表覆盖 to 表
+  - `public static void save()` 保存临时表覆盖正表
+  - `public static void undo()` 撤销临时表回退为正表
 
 
 
@@ -323,6 +337,16 @@ create table if not exists `score` (
 
 - `SetDatabase` 修改数据库连接配置对话窗
   - `public SetDatabase(Root frame)`
+
+- `Page` 主面板类
+  - `public Page()`
+
+- `DbTable` 数据库结果表格类
+  - `public DbTable()`
+  - `public void render(ResultSet/String res)` 将查询语句(或结果)传入，将查询结果显示
+
+- `Tabbar` 操作栏类 各种按钮的集合
+  - `public Tabbar(DbTable jt)` 传入操作的表格
 
 
 

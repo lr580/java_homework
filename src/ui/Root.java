@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.*;
 import javax.swing.*;
 import base.*;
 import mysql.*;
@@ -11,8 +12,11 @@ public class Root extends JFrame {
         super(title);
         setJMenuBar(new RootMenu(this));
         check_db_setting();
+        setLayout(new GridLayout(1, 1, 10, 10));
+        getContentPane().add(new Page());
+        // getContentPane().add(new Page(), BorderLayout.CENTER);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(400, 400);
+        setSize(800, 600);
         setVisible(true);
     }
 
@@ -24,7 +28,6 @@ public class Root extends JFrame {
         } else {
             System.exit(0);
         }
-        DbLoader.checkinit();
     }
 
     private void check_db_setting() {
@@ -34,6 +37,7 @@ public class Root extends JFrame {
             JOptionPane.showMessageDialog(null, Link.err_msg);
             new SetDatabase(this);
         }
+        DbLoader.checkinit();
     }
 
     public static void main(String[] args) {
