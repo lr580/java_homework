@@ -7,6 +7,7 @@ public class Link {
     public static int version = 8;// mysql桥版本,5或8,当前版本不支持5
     public static boolean loaded = false;
     public static Connection con = null;
+    public static Statement cmd = null;
     public static String err_msg = "";// 连接失败报错信息
 
     public static boolean load() {
@@ -25,19 +26,15 @@ public class Link {
             }
             return true;
         } catch (Exception e) {
-            // e.printStackTrace();
             return false;
         }
     }
 
     public static void create_database(String ip, String port, String db, String name, String psw) {// 不存在就创建，存在不会覆盖，忽略已存在报错
-        // if (!(ip.equals("127.0.0.1") || ip.equals("localhost"))) { }
         String cmd = "mysqladmin -h " + ip + " -u " + name + " -p" + psw + " create " + db;
         try {
             Runtime.getRuntime().exec(cmd);
-            // return true;
         } catch (Exception e) {
-            // return false;
         }
     }
 
@@ -55,13 +52,11 @@ public class Link {
             if (cfg.length() != 0) {
                 url += "?" + cfg;
             }
-            // System.out.println(url);
+
             con = DriverManager.getConnection(url, name, psw);
-            // return con;
+            cmd = con.createStatement();
             return true;
         } catch (Exception e) {
-            // e.printStackTrace();
-            // return null;
             err_msg = e.getMessage();
             return false;
         }

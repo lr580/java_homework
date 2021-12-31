@@ -106,18 +106,6 @@ public class Init {
         return f_set.length() != 0;
     }
 
-    public static void init_db_settings() {
-        String[] info = { "8", "127.0.0.1", "3306", "root", Encrypt.encode("123456"), "went", "serverTimezone=UTC" };
-        FileHelper.writelines(info, f_set);
-    }
-
-    public static void update_db_settings(String[] res) {
-        if (res.length > psw_pos) {
-            res[psw_pos] = Encrypt.encode(res[psw_pos]);
-        }
-        FileHelper.writelines(res, f_set);
-    }
-
     public static void update_db_settings(String ip, String port, String db, String user, String psw, String cfg) {
         List<String> v = new LinkedList<>();
         v.add(Integer.toString(Link.version));
@@ -141,7 +129,7 @@ public class Init {
         FileHelper.writelines(res, f_set);
     }
 
-    public static String get_cfg(String[] res) {
+    private static String get_cfg(String[] res) {
         StringBuilder sb = new StringBuilder();
         for (int i = 6; i < res.length; ++i) {
             sb.append(res[i]);

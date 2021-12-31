@@ -3,7 +3,6 @@ package ui;
 import javax.swing.*;
 import base.Init;
 import mysql.Link;
-
 import java.awt.event.*;
 import java.awt.*;
 import plugin.*;
@@ -96,8 +95,7 @@ public class SetDatabase extends JDialog implements ActionListener {
             JOptionPane.showMessageDialog(null, "用户名不能为空");
             return;
         }
-        // System.out.println(ip + " " + port + " " + db + " " + user + " " + psw + " "
-        // + cfg);
+        
         Init.update_db_settings(ip, port, db, user, psw, cfg);
         boolean suc = Link.connect(ip, port, db, user, psw, cfg);
         if (suc) {

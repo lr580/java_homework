@@ -1,8 +1,8 @@
 package ui;
 
 import javax.swing.*;
-import base.Init;
-import mysql.Link;
+import base.*;
+import mysql.*;
 
 public class Root extends JFrame {
     private final static String title = "学生成绩管理系统";
@@ -24,12 +24,13 @@ public class Root extends JFrame {
         } else {
             System.exit(0);
         }
+        DbLoader.checkinit();
     }
 
     private void check_db_setting() {
-        if (!Init.is_inited_db()) {
+        if (!Init.is_inited_db()) {// 未配置过，先配置
             new SetDatabase(this);
-        } else if(!Link.connect()) {
+        } else if (!Link.connect()) {// 已配置过，但自动连接失败
             JOptionPane.showMessageDialog(null, Link.err_msg);
             new SetDatabase(this);
         }
