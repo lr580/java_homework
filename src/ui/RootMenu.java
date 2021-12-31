@@ -14,6 +14,15 @@ public class RootMenu extends JMenuBar {
                 new ChangePsw(frame);
             }
         });
+
+        JMenuItem reset_mysql = new JMenuItem("设置数据库连接");
+        reset_mysql.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new SetDatabase(frame);
+            }
+        });
+
         setting.add(reset_psw);
+        setting.add(reset_mysql);
     }
 }

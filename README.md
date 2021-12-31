@@ -138,7 +138,9 @@
 - `Checker` 检验输入合法性等
 - `FileHelper` 文件操作
   - `public static String read(File/String f)` 失败null
+  - `public static String[] readlines(File/String f)` 失败null
   - `public static boolean write(String t, File/String f)` 失败false
+  - `public static boolean writelines(String[] t, File/String f)` 失败false
   - `public static boolean touch(File/String f)` 新建文件，失败false
 
 - `SwingHelper` 简化 `Swing` 操作
@@ -190,6 +192,10 @@ data/ 数据文件
 - `validate.txt` 校验文本，为了防止删除data/强行初始化来破解程序而保留的文件，该文件必须与user.txt的类包默认密码AES加密一致，当 `user.txt` 为空时，必须与 `Empty&` 文本的类包默认密码AES加密一致
 
   缺陷：破解方法是直接下载发行版的`data/`复制替代即可
+
+- `settings.txt` 数据库设置文本
+
+  格式为一行一个信息，依次是：版本号、IP、端口、数据库名、用户名、密码(AES加密)、参数(一行一个)
 
 
 

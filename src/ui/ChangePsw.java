@@ -1,9 +1,7 @@
 package ui;
 
 import javax.swing.*;
-
 import base.Init;
-
 import java.awt.event.*;
 import java.awt.*;
 import plugin.*;
@@ -39,6 +37,12 @@ public class ChangePsw extends JDialog implements ActionListener {
 
         jp_cfm.addActionListener(this);
         jb.addActionListener(this);
+
+        // jp_ori.addActionListener(new ActionListener() {
+        // public void actionPerformed(ActionEvent e) {
+        // jp_new.setSelectionEnd(0);
+        // }
+        // }); 想尝试按下回车让下一个输入框获取焦点失败了
 
         setSize(235, 160);
         setResizable(false);

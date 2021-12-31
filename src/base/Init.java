@@ -1,6 +1,8 @@
 package base;
 
 import java.io.*;
+import java.util.*;
+import mysql.Link;
 import plugin.*;
 
 /**
@@ -18,6 +20,8 @@ public class Init {
     private static File f_dir = new File("data/");
     private static File f_psw = new File("data/user.txt");
     private static File f_vali = new File("data/validate.txt");
+    private static File f_set = new File("data/settings.txt");
+    public static final int psw_pos = 5;// f_set密码下标
 
     private static boolean create_if_not_exist() {// 创建文件
         boolean integrity = true;// 是否路径完整
@@ -32,6 +36,10 @@ public class Init {
         if (!f_vali.exists()) {
             FileHelper.touch(f_vali);
             integrity = false;
+        }
+        if (!f_set.exists()) {
+            FileHelper.touch(f_set);// 这个残缺不影响密码检验
+            // init_db_settings();
         }
         return integrity;
     }
@@ -82,13 +90,71 @@ public class Init {
         return true;
     }
 
+    public static String[] read_db_settings() {
+        String[] res = FileHelper.readlines(f_set);
+        if (res.length > psw_pos) {
+            res[psw_pos] = Encrypt.decode(res[psw_pos]);
+        }
+        if (res.length > 6) {
+            res[6] = get_cfg(res);
+        }
+        return res;
+    }
+
+    public static boolean is_inited_db() {
+        create_if_not_exist();
+        return f_set.length() != 0;
+    }
+
+    public static void init_db_settings() {
+        String[] info = { "8", "127.0.0.1", "3306", "root", Encrypt.encode("123456"), "went", "serverTimezone=UTC" };
+        FileHelper.writelines(info, f_set);
+    }
+
+    public static void update_db_settings(String[] res) {
+        if (res.length > psw_pos) {
+            res[psw_pos] = Encrypt.encode(res[psw_pos]);
+        }
+        FileHelper.writelines(res, f_set);
+    }
+
+    public static void update_db_settings(String ip, String port, String db, String user, String psw, String cfg) {
+        List<String> v = new LinkedList<>();
+        v.add(Integer.toString(Link.version));
+        v.add(ip);
+        v.add(port);
+        v.add(db);
+        v.add(user);
+        v.add(Encrypt.encode(psw));
+        String sep[] = cfg.split("&");
+        for (int i = 0; i < sep.length; ++i) {
+            if (sep[i].length() > 0) {
+                v.add(sep[i]);
+            }
+        }
+        String res[] = new String[v.size()];
+        Iterator<String> it = v.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            res[i++] = it.next();
+        }
+        FileHelper.writelines(res, f_set);
+    }
+
+    public static String get_cfg(String[] res) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 6; i < res.length; ++i) {
+            sb.append(res[i]);
+            if (i > 6) {
+                sb.append('&');
+            }
+        }
+        return sb.toString();
+    }
+
     public static void main(String[] args) {// 测试用例
-        // System.out.println(Encrypt.decode("").length());
         // change_psw("");
-        // System.out.println("".equals(""));
-        // String x = "", y = "";
-        // System.out.println(x.equals(y));
+        // is_inited_db();
         System.out.println(isValidate());
-        // System.out.println(validate);
     }
 }

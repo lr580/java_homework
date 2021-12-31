@@ -1,6 +1,8 @@
 package ui;
 
 import javax.swing.*;
+import base.Init;
+import mysql.Link;
 
 public class Root extends JFrame {
     private final static String title = "学生成绩管理系统";
@@ -8,6 +10,7 @@ public class Root extends JFrame {
     public Root() {
         super(title);
         setJMenuBar(new RootMenu(this));
+        check_db_setting();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(400, 400);
         setVisible(true);
@@ -20,6 +23,15 @@ public class Root extends JFrame {
             new Root();
         } else {
             System.exit(0);
+        }
+    }
+
+    private void check_db_setting() {
+        if (!Init.is_inited_db()) {
+            new SetDatabase(this);
+        } else if(!Link.connect()) {
+            JOptionPane.showMessageDialog(null, Link.err_msg);
+            new SetDatabase(this);
         }
     }
 

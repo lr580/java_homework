@@ -7,6 +7,7 @@ public class FsLabel extends JLabel {// font-size customized JLable
 
     public FsLabel(String s, int siz) {
         super(SwingHelper.font_size(s, siz));
+        // setAlignmentX(JLabel.RIGHT_ALIGNMENT);没效果
     }
 
     public FsLabel(String s) {
