@@ -121,37 +121,63 @@
 
 ### 类包结构
 
-包 
+包 -类-主要成员列表。这些主要成员将会被外部调用
 
-plugin 功能
+`plugin`包  通用功能
 
-- `SignIn` 登录
 - `Base64Plugin` Base64编码解码
   - `public static String get(byte[] key)` 编码
   - `public static byte[] from(String key)` 解码
-
 - `Encrypt` 加解密
   - `public static byte[] fill(String psw)`
   - `public static String encode(String ori[, String psw])` 
   - `public static String decode(String ori[, String psw])` 失败返回 null
-
 - `PswMD5` MD5加密
   - `public static String encrypt(String data)`
   - `public static String password_md5(String psw)` 加盐
-
 - `Checker` 检验输入合法性等
+- `FileHelper` 文件操作
+  - `public static String read(File/String f)` 失败null
+  - `public static boolean write(String t, File/String f)` 失败false
+  - `public static boolean touch(File/String f)` 新建文件，失败false
+
+- `SwingHelper` 简化 `Swing` 操作
+  - `public static String font_size(String s, int siz) ` 得到 HTML 的 `div` 标签， `font-size:` 为 `siz`
+- `FsLabel` 设置了字体大小的 `JLabel` 
+  - `public FsLabel([String s[, int siz]])`
+- 
 
 
 
-mysql 数据库功能
+`base`包  基础功能
+
+- `Init` 初始化
+  - `public static String login_md5 = null` 登录密码MD5加密
+  - `public static boolean isValidate()` 密码存储是否正确
+  - `public static boolean change_psw(String psw)` 修改密码
+
+
+
+`mysql`包  数据库功能
 
 - 
 
 
 
-ui 交互页面
+`ui`包  交互页面
 
-- Root
+- `Root` 主窗口
+  - `public static void start_root()` 检查登录并启动程序
+
+- `Login` 登录本程序的对话窗
+  - `public boolean suc = false` 登录是否成功
+  - `public Login()` 启动对话窗，进行登录，返回结果 `suc`
+- `RootMenu` 主窗口的菜单栏
+  - `public RootMenu(Root frame)` 
+
+- `ChangePsw` 修改密码对话窗
+  - `public ChangePsw(Root frame)` 
+
 
 
 
@@ -159,8 +185,11 @@ ui 交互页面
 
 data/ 数据文件
 
-- `user.txt` 登录密码的AES加密，密码为类包里的默认密码
-- `validate.txt` 校验文本，为了防止删除data/强行初始化来破解程序而保留的文件，该文件必须与user.txt(解码后)的加盐MD5加密一致，当 `user.txt` 为空时，必须与 `Empty&` 文本的加盐MD5加密一致
+- `user.txt` 登录密码的MD5加密，密码为类包里的默认密码
+
+- `validate.txt` 校验文本，为了防止删除data/强行初始化来破解程序而保留的文件，该文件必须与user.txt的类包默认密码AES加密一致，当 `user.txt` 为空时，必须与 `Empty&` 文本的类包默认密码AES加密一致
+
+  缺陷：破解方法是直接下载发行版的`data/`复制替代即可
 
 
 

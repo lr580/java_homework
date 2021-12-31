@@ -1,17 +1,29 @@
 package ui;
 
-import java.awt.*;
 import javax.swing.*;
-import plugin.*;
 
 public class Root extends JFrame {
+    private final static String title = "学生成绩管理系统";
+
     public Root() {
-        if (Init.isInitialized()) {
+        super(title);
+        setJMenuBar(new RootMenu(this));
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setSize(400, 400);
+        setVisible(true);
+    }
+
+    public static void start_root() {
+        Login login = new Login();
+        if (login.suc) {
+            login.dispose();
+            new Root();
         } else {
+            System.exit(0);
         }
     }
 
     public static void main(String[] args) {
-        new Root();
+        start_root();
     }
 }

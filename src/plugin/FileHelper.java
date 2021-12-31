@@ -43,6 +43,19 @@ public class FileHelper {// 封装读写文件
         return write(t, new File(f));
     }
 
+    public static boolean touch(File f){
+        try{
+            f.createNewFile();
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    public static boolean touch(String f){
+        return touch(new File(f));
+    }
+
     public static void main(String[] args) {// 测试用例
         write("你好吗？a", "a.txt");
         String t = read("a.txt");
