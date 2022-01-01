@@ -1,20 +1,19 @@
 package ui;
 
-import java.awt.*;
 import javax.swing.*;
 import base.*;
 import mysql.*;
 
 public class Root extends JFrame {
     private final static String title = "学生成绩管理系统";
+    private static Root that = null;
 
     public Root() {
         super(title);
+        that = this;// 方便其他窗体类操作Root类
         setJMenuBar(new RootMenu(this));
         check_db_setting();
-        setLayout(new GridLayout(1, 1, 10, 10));
         getContentPane().add(new Page());
-        // getContentPane().add(new Page(), BorderLayout.CENTER);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(800, 600);
         setVisible(true);
@@ -38,6 +37,10 @@ public class Root extends JFrame {
             new SetDatabase(this);
         }
         DbLoader.checkinit();
+    }
+
+    public static void updateTitle() {
+        that.setTitle(title + (DbLoader.saved == 1 ? "" : "*"));
     }
 
     public static void main(String[] args) {

@@ -76,4 +76,20 @@ public class Ctrl {
             return -1;
         }
     }
+
+    public static int getv(ResultSet res){//从单一数据结果获取整数值
+        try {
+            while (res.next()) {
+                return res.getInt(1);
+            }
+            return -1;
+        } catch (Exception e) {
+            raised(e);
+            return -1;
+        }
+    }
+
+    public static int getv(String cmd){
+        return getv(query(cmd));
+    }
 }

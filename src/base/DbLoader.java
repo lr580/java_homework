@@ -2,12 +2,19 @@ package base;
 
 import java.sql.*;
 import mysql.*;
+import ui.*;
+import java.util.Vector;
 
 public class DbLoader {
     private static PreparedStatement info_adder = null;
     private static PreparedStatement info_changer = null;
     public static int t_main = 0;// 主表
     public static int t_temp = 0;// 临时表
+    public static int saved = 1;// 是否已保存
+    public static Vector<String> backups = new Vector<>();// 备份编号
+    public static int cnt_stu = 0;// 临时表累积学生数
+    public static int cnt_sub = 0;// 临时表累积课程数
+    public static int cnt_sco = 0;// 临时表累积成绩数
 
     public static void checkinit() {// 检查是否需要初始化，是则自动执行
         cr_info();
@@ -20,7 +27,7 @@ public class DbLoader {
 
     }
 
-    private static void add_info(String key, int value) {
+    public static void add_info(String key, int value) {
         try {
             info_adder.setString(1, key);
             info_adder.setInt(2, value);
@@ -30,7 +37,7 @@ public class DbLoader {
         }
     }
 
-    private static void set_info(String key, int value) {
+    public static void set_info(String key, int value) {
         try {
             info_changer.setInt(1, value);
             info_changer.setString(2, key);
@@ -70,9 +77,18 @@ public class DbLoader {
             cr_table();
             t_main = 1;
             t_temp = 2;
+            saved = 1;
         } else {
             t_main = get_info("main");
             t_temp = get_info("temp");
+            saved = get_info("saved");
+            cnt_stu = get_info("a_" + t_temp);
+            cnt_sub = get_info("b_" + t_temp);
+            cnt_sco = get_info("c_" + t_temp);
+            get_backups();
+        }
+        if (saved == 0) {
+            Root.updateTitle();
         }
     }
 
@@ -99,6 +115,8 @@ public class DbLoader {
         cr_subject("subject_" + x);
         cr_score("score_" + x);
         add_info("a_" + x, 0);
+        add_info("b_" + x, 0);
+        add_info("c_" + x, 0);
     }
 
     public static void cr_table() {
@@ -114,14 +132,44 @@ public class DbLoader {
     }
 
     public static void overwrite(int from, int to) {
+        del_table(to);
+        Ctrl.run("create table `student_" + to + "` select * from `student_" + from + "`");
+        Ctrl.run("create table `subject_" + to + "` select * from `subject_" + from + "`");
+        Ctrl.run("create table `score_" + to + "` select * from `score_" + from + "`");
+    }
+
+    private static void update_saved() {
         set_info("saved", 1);
+        saved = 1;
+        Root.updateTitle();
     }
 
     public static void save() {
         overwrite(t_temp, t_main);
+        update_saved();
     }
 
     public static void undo() {
         overwrite(t_main, t_temp);
+        update_saved();
+        DbTable.fresh();
+    }
+
+    private static void get_backups() {
+        backups.clear();
+        ResultSet res = Ctrl.query("select `key` from info where `key` like 'a_%'");
+        try {
+            while (res.next()) {
+                String tmp = res.getString(1);
+                tmp = tmp.substring(2);
+                int v = Integer.valueOf(tmp);
+                if (v == t_main || v == t_temp) {
+                    continue;
+                }
+                backups.add(tmp);
+            }
+        } catch (Exception e) {
+            Ctrl.raised(e);
+        }
     }
 }
