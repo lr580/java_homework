@@ -94,6 +94,19 @@ public class DbLoader {
         }
     }
 
+    public static void del_all_table() {
+        ResultSet res = Ctrl.query("show tables;");
+        try {
+            while (res.next()) {
+                String tmp = res.getString(1);
+                System.out.println(tmp);
+                Ctrl.run("drop table `" + tmp + "`;");
+            }
+        } catch (Exception e) {
+            Ctrl.raised(e);
+        }
+    }
+
     private static void cr_student(String name) {// 不存在则创建学生表
         String cmd = "create table if not exists `" + name
                 + "` (`id` int not null auto_increment, `name` varchar(20) not null, `student_number` varchar(20) not null, `major` varchar(20), primary key(`id`)) engine=InnoDB default charset utf8";

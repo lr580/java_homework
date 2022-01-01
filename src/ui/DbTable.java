@@ -80,7 +80,7 @@ public class DbTable extends JTable {
         render(last_cmd);
     }
 
-    public static void fresh(){
+    public static void fresh() {
         that.refresh();
     }
 

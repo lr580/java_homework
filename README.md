@@ -109,7 +109,26 @@
 
 - `settings.txt` 数据库设置文本
 
-  格式为一行一个信息，依次是：版本号、IP、端口、数据库名、用户名、密码(AES加密)、参数(一行一个)
+  格式为一行一个信息，依次是：
+
+  - 0下标 版本号 
+  - 1下标 IP
+  - 2下标 端口
+  - 3下标 数据库名
+  - 4下标 用户名
+  - 5下标 密码(AES加密)
+  - 6下标 参数(一行一个)
+
+
+
+
+在路径`log/` 下，为若干程序运行产生的日志文件，每次程序正常退出时写入一次日志文件(未来如有必要增加关闭写日志的选项)
+
+> 日志文件为未来可能增加的诸如逐步撤销和逐步重做、自动批处理等功能做铺垫
+
+文件格式为：`年yyyy-月mm-日dd-时hh-分mm-秒ss.log` ，如 `2022-01-01-15-54-09` 
+
+每行是一条用户的操作行为及其操作的时间(`时:分:秒`)
 
 
 
@@ -144,7 +163,6 @@ create table if not exists `info` (
 存储的信息有：
 
 - `cnt` 累计建表数(下一次生成的表号由此决定)
-- `backups` 备份数目
 - `saved` 是否已保存临时表,是1否0
 - `main` 主表编号
 - `temp` 临时表编号
@@ -297,6 +315,7 @@ create table if not exists `score` (
   - `public static boolean exists(ResultSet res, String col, String key)` 查找结果某列是否有某值
   - `public static PreparedStatement pre(String cmd)` 创建一个预处理语句
   - `public static int getv(ResultSet res, String col, String key, String value)` 得到结果中 `col` 列为 `key` 的这一行里面 `value` 列的值(`int`类型)
+  - `public static int getv(ResultSet/String res)` 执行只获得一行一列的查询语句并返回整数结果
 
 
 
@@ -332,6 +351,7 @@ create table if not exists `score` (
   - `public static int del_info(String key)` 删除一条全局信息
 - `DbCtrl` 数据库操纵
   - `public static void write_diary(String dia)` 增加运行日志行 (`dia`不需换行符)
+  - `public static void save_diary()` 将日记写入磁盘
   - `public static int add_stu(String name, String number, String major)` 添加一个学生到临时表
 
 
@@ -342,6 +362,7 @@ create table if not exists `score` (
 
 - `Root` 主窗口
   - `public static void start_root()` 检查登录并启动程序
+  - `public static void updateTitle()` 更新标题(未保存时有`*` 字符)
 
 - `Login` 登录本程序的对话窗
   - `public boolean suc = false` 登录是否成功
@@ -361,9 +382,22 @@ create table if not exists `score` (
 - `DbTable` 数据库结果表格类
   - `public DbTable()`
   - `public void render(ResultSet/String res)` 将查询语句(或结果)传入，将查询结果显示
+  - `public void refresh()` 刷新当前查询语句
+  - `public static void fresh()` 刷新当前查询语句
 
 - `Tabbar` 操作栏类 各种按钮的集合
   - `public Tabbar(DbTable jt)` 传入操作的表格
+
+- `TbGlobal`
+  - `public TbGlobal(DbTable jt)`
+  - `public static ActionListener e_save` 事件监听器(保存)
+  - `public static ActionListener e_undo` 事件监听器(撤销)
+  - `public static ActionListener e_backup` 事件监听器(备份)
+  - `public static ActionListener e_frombackup` 事件监听器(还原)
+  - `public static ActionListener e_delbackup` 事件监听器(删除备份)
+
+- `TbStu` 学生数据管理的全部按钮和输入框
+  - `public TbStu(DbTable jt)`
 
 
 

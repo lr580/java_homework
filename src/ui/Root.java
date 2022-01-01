@@ -7,7 +7,7 @@ import java.awt.event.*;
 
 public class Root extends JFrame {
     private final static String title = "学生成绩管理系统";
-    private static Root that = null;
+    public static Root that = null;
 
     public Root() {
         super(title);

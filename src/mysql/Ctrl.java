@@ -77,7 +77,7 @@ public class Ctrl {
         }
     }
 
-    public static int getv(ResultSet res){//从单一数据结果获取整数值
+    public static int getv(ResultSet res) {// 从单一数据结果获取整数值
         try {
             while (res.next()) {
                 return res.getInt(1);
@@ -89,7 +89,7 @@ public class Ctrl {
         }
     }
 
-    public static int getv(String cmd){
+    public static int getv(String cmd) {
         return getv(query(cmd));
     }
 }

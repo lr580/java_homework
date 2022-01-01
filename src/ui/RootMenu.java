@@ -30,12 +30,30 @@ public class RootMenu extends JMenuBar {
         delbackup.setAccelerator(
                 KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
 
+        JMenuItem importall = new JMenuItem("导入数据库");
+        importall.addActionListener(TbGlobal.e_importall);
+        importall.setAccelerator(
+                KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
+
+        JMenuItem exportall = new JMenuItem("导出所有数据");
+        exportall.addActionListener(TbGlobal.e_exportall);
+        exportall.setAccelerator(
+                KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
+
+        JMenuItem export = new JMenuItem("导出当前表");
+        export.addActionListener(TbGlobal.e_export);
+        export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.SHIFT_DOWN_MASK));
+
         file.add(save);
         file.add(undo);
         file.addSeparator();
         file.add(backup);
         file.add(frombackup);
         file.add(delbackup);
+        file.addSeparator();
+        file.add(importall);
+        file.add(exportall);
+        file.add(export);
 
         JMenu setting = new JMenu("设置");
         add(setting);
