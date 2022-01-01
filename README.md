@@ -314,10 +314,25 @@ create table if not exists `score` (
   - `public static final int psw_pos = 5` 数据库连接信息密码项下标
 - `DbLoader` 数据库初始化和加载
   - `public static void checkinit() ` 检查并执行(若需要)初始化
-  - `public static void cr_table(int x)` 建立第 $x$ 号表
+  - `public static void cr_table()` 建立新的表
+  - `public static void del_table(int x)` 删除指定编号的表
   - `public static void overwrite(int from, int to)` 用 from 表覆盖 to 表
-  - `public static void save()` 保存临时表覆盖正表
-  - `public static void undo()` 撤销临时表回退为正表
+  - `public static void save()` 保存临时表覆盖主表
+  - `public static void undo()` 撤销临时表回退为主表
+  - `public static int t_main = 0` 主表编号
+  - `public static int t_temp = 0` 临时表编号
+  - `public static int saved = 1` 临时表是否已保存到主表
+  - `public static Vector<String> backups = new Vector<>()` 备份表编号列表
+  - `public static int cnt_stu = 0` 临时表累积学生数
+  - `public static int cnt_sub = 0` 临时表累积课程数
+  - `public static int cnt_sco = 0` 临时表累积成绩数
+  - `public static void add_info(String key, int value)` 增加一条全局信息
+  - `public static void set_info(String key, int value)` 修改一条全局信息
+  - `public static int get_info(String key)` 获取一条全局信息
+  - `public static int del_info(String key)` 删除一条全局信息
+- `DbCtrl` 数据库操纵
+  - `public static void write_diary(String dia)` 增加运行日志行 (`dia`不需换行符)
+  - `public static int add_stu(String name, String number, String major)` 添加一个学生到临时表
 
 
 

@@ -15,6 +15,7 @@ public class DbLoader {
     public static int cnt_stu = 0;// 临时表累积学生数
     public static int cnt_sub = 0;// 临时表累积课程数
     public static int cnt_sco = 0;// 临时表累积成绩数
+    private static int top = 0;// 数据表累积数
 
     public static void checkinit() {// 检查是否需要初始化，是则自动执行
         cr_info();
@@ -71,13 +72,13 @@ public class DbLoader {
             add_info("main", 1);
             add_info("temp", 2);
             add_info("saved", 1);
-            add_info("backups", 0);
             add_info("top", 0);
             cr_table();
             cr_table();
             t_main = 1;
             t_temp = 2;
             saved = 1;
+            top = 2;
         } else {
             t_main = get_info("main");
             t_temp = get_info("temp");
@@ -85,6 +86,7 @@ public class DbLoader {
             cnt_stu = get_info("a_" + t_temp);
             cnt_sub = get_info("b_" + t_temp);
             cnt_sco = get_info("c_" + t_temp);
+            top = get_info("top");
             get_backups();
         }
         if (saved == 0) {
@@ -129,6 +131,7 @@ public class DbLoader {
         Ctrl.run("drop table if exists `student_" + x + "`;");
         Ctrl.run("drop table if exists `subject_" + x + "`;");
         Ctrl.run("drop table if exists `score_" + x + "`;");
+        Ctrl.run("delete from `info` where `key` like '%_" + x + "';");
     }
 
     public static void overwrite(int from, int to) {
@@ -136,6 +139,12 @@ public class DbLoader {
         Ctrl.run("create table `student_" + to + "` select * from `student_" + from + "`");
         Ctrl.run("create table `subject_" + to + "` select * from `subject_" + from + "`");
         Ctrl.run("create table `score_" + to + "` select * from `score_" + from + "`");
+        String s[] = { "a", "b", "c" };
+        for (String i : s) {
+            Ctrl.run("insert ignore into `info` (`key`, `value`) values ('" + i + "_" + to + "', 0)");
+            int v = Ctrl.getv("select `value` from `info` where `key`='" + i + "_" + from + "';");
+            Ctrl.run("update `info` set `value`=" + v + " where `key` = '" + i + "_" + to + "';");
+        }
     }
 
     private static void update_saved() {
@@ -147,12 +156,14 @@ public class DbLoader {
     public static void save() {
         overwrite(t_temp, t_main);
         update_saved();
+        DbCtrl.write_diary("保存");
     }
 
     public static void undo() {
         overwrite(t_main, t_temp);
         update_saved();
         DbTable.fresh();
+        DbCtrl.write_diary("撤销全部未保存更改");
     }
 
     private static void get_backups() {
@@ -166,10 +177,35 @@ public class DbLoader {
                 if (v == t_main || v == t_temp) {
                     continue;
                 }
-                backups.add(tmp);
+                backups.addElement(tmp);
             }
         } catch (Exception e) {
             Ctrl.raised(e);
         }
+    }
+
+    public static void addbackup() {
+        ++top;
+        overwrite(t_temp, top);
+        set_info("top", top);
+        backups.addElement(Integer.toString(top));
+        DbCtrl.write_diary("备份当前表为第" + top + "号表");
+    }
+
+    public static void frombackup(int i) {
+        String v = backups.elementAt(i);
+        overwrite(Integer.valueOf(v), t_temp);
+        DbTable.fresh();
+        saved = 0;
+        set_info("saved", 0);
+        Root.updateTitle();
+        DbCtrl.write_diary("用第" + v + "号备份表覆盖当前表");
+    }
+
+    public static void delbackup(int i) {
+        String v = backups.elementAt(i);
+        backups.remove(v);
+        del_table(Integer.valueOf(v));
+        DbCtrl.write_diary("删除第" + v + "号备份表");
     }
 }

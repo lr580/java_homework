@@ -9,7 +9,6 @@ import plugin.FsLabel;
 public class TbGlobal extends JPanel {
     public static DbTable jt = null;
     public static JComboBox<String> jc = new JComboBox<>(DbLoader.backups);
-
     public static ActionListener e_save = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             DbLoader.save();
@@ -32,19 +31,45 @@ public class TbGlobal extends JPanel {
 
     public static ActionListener e_backup = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-
+            DbLoader.addbackup();
         }
     };
 
     public static ActionListener e_frombackup = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-
+            int i = jc.getSelectedIndex();
+            if (i == -1) {
+                JOptionPane.showMessageDialog(null, "您没有选中备份项");
+                return;
+            }
+            if (DbLoader.saved == 0) {
+                int j = JOptionPane.showConfirmDialog(null, "这将会不可恢复地丢失尚未保存的全部更改,确认还原吗", "提示",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE);
+                if (j != JOptionPane.OK_OPTION) {
+                    return;
+                }
+            }
+            DbLoader.frombackup(i);
         }
     };
 
     public static ActionListener e_delbackup = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-
+            int i = jc.getSelectedIndex();
+            if (i == -1) {
+                JOptionPane.showMessageDialog(null, "您没有选中备份项");
+                return;
+            }
+            if (DbLoader.saved == 0) {
+                int j = JOptionPane.showConfirmDialog(null, "这将会不可恢复地永久删除该备份,确认删除吗", "提示",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE);
+                if (j != JOptionPane.OK_OPTION) {
+                    return;
+                }
+            }
+            DbLoader.delbackup(i);
         }
     };
 
