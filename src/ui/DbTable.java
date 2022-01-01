@@ -1,8 +1,8 @@
 package ui;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.table.*;
-
 import base.DbLoader;
 import mysql.Ctrl;
 import java.awt.Font;
@@ -13,7 +13,9 @@ public class DbTable extends JTable {
     private DefaultTableModel tm = new DefaultTableModel();
     private final static Map<String, String> h = new HashMap<>();// 列名英译中
     private String last_cmd = "";// 上一次渲染的语句
-    private static DbTable that = null;
+    public static DbTable that = null;
+    public static int table_idx = 0;// 当前表格编号,0学生,1课程,2成绩
+    // public static String now_row[] = null;// 最后选中的行数据
 
     public DbTable() {
         init_h();
@@ -28,7 +30,24 @@ public class DbTable extends JTable {
         jh.setFont(ft);
         setTableHeader(jh);
 
-        // ResultSet tmp = Ctrl.query();
+        getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                int rows[] = getSelectedRows();
+                if (rows.length == 0) {
+                    return;
+                }
+                int row = rows[rows.length - 1];
+                String s[] = new String[tm.getColumnCount()];
+                // now_row = s;
+                for (int i = 0; i < s.length; ++i) {
+                    s[i] = (String) getValueAt(row, i);
+                }
+                if (table_idx == 0) {
+                    TbStu.upd_input(s);
+                }
+            }
+        });
+
         render("select * from student_" + DbLoader.t_temp);// 初始值
     }
 
@@ -85,10 +104,20 @@ public class DbTable extends JTable {
     }
 
     public boolean isCellEditable(int row, int col) {
-        return col > 0;
+        return false;// 暂时不支持双击编辑表格直接修改数据库
     }
 
     public void addRow(String[] row) {
         tm.addRow(row);
+    }
+
+    public void setRow(int row, String[] s) {
+        for (int i = 0; i < s.length; ++i) {
+            setValueAt(s[i], row, i);
+        }
+    }
+
+    public static void updRow(int row, String[] s) {
+        that.setRow(row, s);
     }
 }

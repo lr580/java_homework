@@ -29,6 +29,7 @@ public class Tabbar extends JTabbedPane {
                 } else if (idx == 2) {
                     jt.render("select * from score_" + DbLoader.t_temp);
                 }
+                DbTable.table_idx = idx;
             }
         });
     }

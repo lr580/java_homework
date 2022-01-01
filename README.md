@@ -353,6 +353,7 @@ create table if not exists `score` (
   - `public static void write_diary(String dia)` 增加运行日志行 (`dia`不需换行符)
   - `public static void save_diary()` 将日记写入磁盘
   - `public static int add_stu(String name, String number, String major)` 添加一个学生到临时表
+  - `public static void upd_stu(int id, String name, String number, String major)` 修改临时表学生
 
 
 
@@ -384,7 +385,12 @@ create table if not exists `score` (
   - `public void render(ResultSet/String res)` 将查询语句(或结果)传入，将查询结果显示
   - `public void refresh()` 刷新当前查询语句
   - `public static void fresh()` 刷新当前查询语句
-
+  - `public void addRow(String[] row)` 增加一行
+  - `public void setRow(int row, String[] s)` 更新一行
+  - `public static void updRow(int row, String[] s)` 更新一行
+  - `public static int table_idx = 0 ` 当前表格编号,0学生,1课程,2成绩
+  - ` public static DbTable that = null` 当前组件对象
+  
 - `Tabbar` 操作栏类 各种按钮的集合
   - `public Tabbar(DbTable jt)` 传入操作的表格
 
@@ -395,10 +401,14 @@ create table if not exists `score` (
   - `public static ActionListener e_backup` 事件监听器(备份)
   - `public static ActionListener e_frombackup` 事件监听器(还原)
   - `public static ActionListener e_delbackup` 事件监听器(删除备份)
-
+  - `public static ActionListener e_importall` 事件监听器(导入)
+  - `public static ActionListener e_exportall` 事件监听器(导出全部)
+  - `public static ActionListener e_exporta` 事件监听器(导出当前表)
+  - `public static String get_newpath()` 从文件选择器获得一个`.sql`文件路径
+  
 - `TbStu` 学生数据管理的全部按钮和输入框
   - `public TbStu(DbTable jt)`
-
+  - `public static void upd_input(String[] s)` 更新输入框
 
 
 

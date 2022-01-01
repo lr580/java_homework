@@ -33,7 +33,7 @@ public class RootMenu extends JMenuBar {
         JMenuItem importall = new JMenuItem("导入数据库");
         importall.addActionListener(TbGlobal.e_importall);
         importall.setAccelerator(
-                KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
+                KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK | KeyEvent.ALT_DOWN_MASK));// ctrl+shift+o跟jtextfield冲突
 
         JMenuItem exportall = new JMenuItem("导出所有数据");
         exportall.addActionListener(TbGlobal.e_exportall);

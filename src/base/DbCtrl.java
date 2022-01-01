@@ -10,13 +10,16 @@ import java.io.File;
 public class DbCtrl {
     private static StringBuilder diary = new StringBuilder();// 运行日志
     private static PreparedStatement s_add_stu = null;
+    private static PreparedStatement s_upd_stu = null;
     private static File f_dir = new File("log/");
     private static File f_log = new File("log/" + getNow() + ".log");
-    // private static File f_dia = new File("log/");
+
     static {// 初始化
         s_add_stu = Ctrl.pre(
                 "insert into `student_" + DbLoader.t_temp
                         + "` (`id`, `name`, `student_number`, `major`) values (?, ?, ?, ?)");
+        s_upd_stu = Ctrl.pre(
+                "update `student_" + DbLoader.t_temp + "` set `name`= ?, `student_number`=?, `major`=? where `id`=?");
         write_diary("启动程序");
     }
 
@@ -59,6 +62,21 @@ public class DbCtrl {
         } catch (Exception e) {
             Ctrl.raised(e);
             return -1;
+        }
+    }
+
+    public static void upd_stu(int id, String name, String number, String major) {
+        try {
+            s_upd_stu.setString(1, name);
+            s_upd_stu.setString(2, number);
+            s_upd_stu.setString(3, major);
+            s_upd_stu.setInt(4, id);
+            s_upd_stu.executeUpdate();
+            change("修改学生" + id + "为 (" + name + ", " + number + ", " + major + ")");
+
+        } catch (Exception e) {
+            Ctrl.raised(e);
+            return;
         }
     }
 
