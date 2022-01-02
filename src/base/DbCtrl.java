@@ -11,6 +11,8 @@ public class DbCtrl {
     private static StringBuilder diary = new StringBuilder();// 运行日志
     private static PreparedStatement s_add_stu = null;
     private static PreparedStatement s_upd_stu = null;
+    private static PreparedStatement s_del_stu = null;
+    private static PreparedStatement s_sea_stu = null;
     private static File f_dir = new File("log/");
     private static File f_log = new File("log/" + getNow() + ".log");
 
@@ -20,6 +22,9 @@ public class DbCtrl {
                         + "` (`id`, `name`, `student_number`, `major`) values (?, ?, ?, ?)");
         s_upd_stu = Ctrl.pre(
                 "update `student_" + DbLoader.t_temp + "` set `name`= ?, `student_number`=?, `major`=? where `id`=?");
+        s_del_stu = Ctrl.pre("delete from `student_" + DbLoader.t_temp + "` where `id` = ?");
+        s_sea_stu = Ctrl.pre("select * from `student_" + DbLoader.t_temp
+                + "` where `name` like ? and `student_number` like ? and `major` like ?");
         write_diary("启动程序");
     }
 
@@ -77,6 +82,31 @@ public class DbCtrl {
         } catch (Exception e) {
             Ctrl.raised(e);
             return;
+        }
+    }
+
+    public static void del_stu(int id) {
+        try {
+            s_del_stu.setInt(1, id);
+            s_del_stu.executeUpdate();
+            change("删除学生" + id);
+        } catch (Exception e) {
+            Ctrl.raised(e);
+            return;
+        }
+    }
+
+    public static String sea_stu(String name, String number, String major) {
+        try {// 返回可执行的sql语句，交给DbTable的render方法执行
+            s_sea_stu.setString(1, name);
+            s_sea_stu.setString(2, number);
+            s_sea_stu.setString(3, major);
+            String tmp = s_sea_stu.toString();
+            tmp = tmp.substring(tmp.indexOf(":") + 1);
+            return tmp;
+        } catch (Exception e) {
+            Ctrl.raised(e);
+            return null;
         }
     }
 

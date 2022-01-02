@@ -38,7 +38,7 @@ public class DbTable extends JTable {
                 }
                 int row = rows[rows.length - 1];
                 String s[] = new String[tm.getColumnCount()];
-                // now_row = s;
+                // 将当前选中的最下一行填入编辑框
                 for (int i = 0; i < s.length; ++i) {
                     s[i] = (String) getValueAt(row, i);
                 }
@@ -71,7 +71,8 @@ public class DbTable extends JTable {
             tm.setColumnCount(0);
             tm.setRowCount(0);
             for (int i = 1; i <= n; ++i) {
-                tm.addColumn(h.get(reso.getColumnName(i)));
+                String colname = reso.getColumnName(i);
+                tm.addColumn(h.get(colname) + "(" + colname + ")");
                 ty[i] = reso.getColumnType(i);// 不判断直接全部getString也行
             }
             while (res.next()) {
@@ -119,5 +120,13 @@ public class DbTable extends JTable {
 
     public static void updRow(int row, String[] s) {
         that.setRow(row, s);
+    }
+
+    public static void delSeleRow() {// 删除所有选中行
+        int rows[] = DbTable.that.getSelectedRows();
+        // 确保删除后剩余待删除的下标不变,倒序
+        for (int i = rows.length - 1; i >= 0; --i) {
+            that.tm.removeRow(rows[i]);
+        }
     }
 }

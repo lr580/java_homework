@@ -353,7 +353,9 @@ create table if not exists `score` (
   - `public static void write_diary(String dia)` 增加运行日志行 (`dia`不需换行符)
   - `public static void save_diary()` 将日记写入磁盘
   - `public static int add_stu(String name, String number, String major)` 添加一个学生到临时表
-  - `public static void upd_stu(int id, String name, String number, String major)` 修改临时表学生
+  - `public static void upd_stu(int id, String name, String number, String major)` 修改一个临时表学生
+  - `public static void del_stu(int id)` 删除一个学生
+  - `public static String sea_stu(String name, String number, String major)` 得到搜索学生的对应 SQL 语句
 
 
 
@@ -364,22 +366,17 @@ create table if not exists `score` (
 - `Root` 主窗口
   - `public static void start_root()` 检查登录并启动程序
   - `public static void updateTitle()` 更新标题(未保存时有`*` 字符)
-
 - `Login` 登录本程序的对话窗
   - `public boolean suc = false` 登录是否成功
   - `public Login()` 启动对话窗，进行登录，返回结果 `suc`
 - `RootMenu` 主窗口的菜单栏
   - `public RootMenu(Root frame)` 
-
 - `ChangePsw` 修改密码对话窗
   - `public ChangePsw(Root frame)` 
-
 - `SetDatabase` 修改数据库连接配置对话窗
   - `public SetDatabase(Root frame)`
-
 - `Page` 主面板类
   - `public Page()`
-
 - `DbTable` 数据库结果表格类
   - `public DbTable()`
   - `public void render(ResultSet/String res)` 将查询语句(或结果)传入，将查询结果显示
@@ -388,12 +385,11 @@ create table if not exists `score` (
   - `public void addRow(String[] row)` 增加一行
   - `public void setRow(int row, String[] s)` 更新一行
   - `public static void updRow(int row, String[] s)` 更新一行
+  - `public static void delSeleRow()` 删除所有选中行
   - `public static int table_idx = 0 ` 当前表格编号,0学生,1课程,2成绩
   - ` public static DbTable that = null` 当前组件对象
-  
 - `Tabbar` 操作栏类 各种按钮的集合
   - `public Tabbar(DbTable jt)` 传入操作的表格
-
 - `TbGlobal`
   - `public TbGlobal(DbTable jt)`
   - `public static ActionListener e_save` 事件监听器(保存)
@@ -405,7 +401,6 @@ create table if not exists `score` (
   - `public static ActionListener e_exportall` 事件监听器(导出全部)
   - `public static ActionListener e_exporta` 事件监听器(导出当前表)
   - `public static String get_newpath()` 从文件选择器获得一个`.sql`文件路径
-  
 - `TbStu` 学生数据管理的全部按钮和输入框
   - `public TbStu(DbTable jt)`
   - `public static void upd_input(String[] s)` 更新输入框

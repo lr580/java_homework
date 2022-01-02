@@ -8,7 +8,7 @@ import java.awt.event.*;
 import plugin.*;
 import java.io.*;
 
-public class TbGlobal extends JPanel {
+public class TbGlobal extends JPanel {// tabbar global
     public static DbTable jt = null;
     public static JComboBox<String> jc = new JComboBox<>(DbLoader.backups);
     private static javax.swing.filechooser.FileFilter flits = new FileNameExtensionFilter("数据库文件(.sql)", "sql");
@@ -176,6 +176,9 @@ public class TbGlobal extends JPanel {
         JPanel df = new JPanel(new FlowLayout(1, 5, 5));
         add(df);
 
+        if (jc.getItemCount() > 0) {
+            jc.setSelectedIndex(0);
+        }
         df.add(new FsLabel("已有备份号:"));
         df.add(jc);
 
