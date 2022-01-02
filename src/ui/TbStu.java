@@ -147,9 +147,6 @@ public class TbStu extends JPanel {// tabbar - student
 
         JButton b_addstu = new JButton("添加学生");
         b_addstu.addActionListener(add_stu);
-        i_name.addActionListener(add_stu);
-        i_number.addActionListener(add_stu);
-        i_major.addActionListener(add_stu);
         p_stu_df.add(b_addstu);
 
         JButton b_updstu = new JButton("修改选中学生");
@@ -167,5 +164,8 @@ public class TbStu extends JPanel {// tabbar - student
         JButton b_search = new JButton("搜索");
         b_search.addActionListener(esearch);
         p_stu_df.add(b_search);
+        i_name.addActionListener(esearch);
+        i_number.addActionListener(esearch);
+        i_major.addActionListener(esearch);
     }
 }

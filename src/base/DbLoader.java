@@ -79,6 +79,7 @@ public class DbLoader {
             t_temp = 2;
             saved = 1;
             top = 2;
+            DbCtrl.write_diary("初始化数据库");
         } else {
             t_main = get_info("main");
             t_temp = get_info("temp");

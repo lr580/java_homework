@@ -35,6 +35,7 @@ public class TbGlobal extends JPanel {// tabbar global
     public static ActionListener e_backup = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             DbLoader.addbackup();
+            jc.setSelectedIndex(jc.getItemCount() - 1);
         }
     };
 
@@ -64,15 +65,16 @@ public class TbGlobal extends JPanel {// tabbar global
                 JOptionPane.showMessageDialog(null, "您没有选中备份项");
                 return;
             }
-            if (DbLoader.saved == 0) {
-                int j = JOptionPane.showConfirmDialog(null, "这将会不可恢复地永久删除该备份,确认删除吗", "提示",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE);
-                if (j != JOptionPane.OK_OPTION) {
-                    return;
-                }
+            int j = JOptionPane.showConfirmDialog(null, "这将会不可恢复地永久删除该备份,确认删除吗", "提示",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE);
+            if (j != JOptionPane.OK_OPTION) {
+                return;
             }
             DbLoader.delbackup(i);
+            if (jc.getItemCount() > 0) {
+                jc.setSelectedIndex(0);
+            }
         }
     };
 

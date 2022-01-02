@@ -44,6 +44,8 @@ public class DbTable extends JTable {
                 }
                 if (table_idx == 0) {
                     TbStu.upd_input(s);
+                } else if (table_idx == 1) {
+                    TbSubj.upd_input(s);
                 }
             }
         });

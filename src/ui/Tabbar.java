@@ -13,8 +13,7 @@ public class Tabbar extends JTabbedPane {
         setTabPlacement(JTabbedPane.TOP);
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         addTab("学生管理", new TbStu(jt));
-        JPanel p_subj = new JPanel(new GridLayout(1, 1, 5, 5));
-        addTab("课程管理", p_subj);
+        addTab("课程管理", new TbSubj());
         JPanel p_sco = new JPanel(new GridLayout(1, 1, 5, 5));
         addTab("成绩管理", p_sco);
         addTab("全局", new TbGlobal(jt));

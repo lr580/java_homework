@@ -1,7 +1,7 @@
 package ui;
 
 import javax.swing.*;
-import base.Init;
+import base.*;
 import mysql.Link;
 import java.awt.event.*;
 import java.awt.*;
@@ -99,6 +99,7 @@ public class SetDatabase extends JDialog implements ActionListener {
         Init.update_db_settings(ip, port, db, user, psw, cfg);
         boolean suc = Link.connect(ip, port, db, user, psw, cfg);
         if (suc) {
+            DbCtrl.write_diary("设置数据库链接");
             dispose();
         }else{
             JOptionPane.showMessageDialog(null, Link.err_msg);

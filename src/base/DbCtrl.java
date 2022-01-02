@@ -10,9 +10,13 @@ import java.io.File;
 public class DbCtrl {
     private static StringBuilder diary = new StringBuilder();// 运行日志
     private static PreparedStatement s_add_stu = null;
+    private static PreparedStatement s_add_sub = null;
     private static PreparedStatement s_upd_stu = null;
+    private static PreparedStatement s_upd_sub = null;
     private static PreparedStatement s_del_stu = null;
+    private static PreparedStatement s_del_sub = null;
     private static PreparedStatement s_sea_stu = null;
+    private static PreparedStatement s_sea_sub = null;
     private static File f_dir = new File("log/");
     private static File f_log = new File("log/" + getNow() + ".log");
 
@@ -20,11 +24,23 @@ public class DbCtrl {
         s_add_stu = Ctrl.pre(
                 "insert into `student_" + DbLoader.t_temp
                         + "` (`id`, `name`, `student_number`, `major`) values (?, ?, ?, ?)");
+        s_add_sub = Ctrl.pre(
+                "insert into `subject_" + DbLoader.t_temp
+                        + "` (`id`, `name`, `semester`) values (?, ?, ?)");
+
         s_upd_stu = Ctrl.pre(
                 "update `student_" + DbLoader.t_temp + "` set `name`= ?, `student_number`=?, `major`=? where `id`=?");
+        s_upd_sub = Ctrl.pre(
+                "update `subject_" + DbLoader.t_temp + "` set `name`= ?, `semester`=? where `id`=?");
+
         s_del_stu = Ctrl.pre("delete from `student_" + DbLoader.t_temp + "` where `id` = ?");
+        s_del_sub = Ctrl.pre("delete from `subject_" + DbLoader.t_temp + "` where `id` = ?");
+
         s_sea_stu = Ctrl.pre("select * from `student_" + DbLoader.t_temp
                 + "` where `name` like ? and `student_number` like ? and `major` like ?");
+        s_sea_sub = Ctrl.pre("select * from `subject_" + DbLoader.t_temp
+                + "` where `name` like ? and `semester` like ?");
+
         write_diary("启动程序");
     }
 
@@ -62,8 +78,23 @@ public class DbCtrl {
             s_add_stu.setString(4, major);
             s_add_stu.executeUpdate();
             DbLoader.set_info("a_" + DbLoader.t_temp, DbLoader.cnt_stu);
-            change("添加学生 (" + name + ", " + number + ", " + major + ")");
+            change("添加学生" + DbLoader.cnt_stu + " (" + name + ", " + number + ", " + major + ")");
             return DbLoader.cnt_stu;
+        } catch (Exception e) {
+            Ctrl.raised(e);
+            return -1;
+        }
+    }
+
+    public static int add_sub(String name, String semester) {
+        try {
+            s_add_sub.setInt(1, ++DbLoader.cnt_sub);
+            s_add_sub.setString(2, name);
+            s_add_sub.setString(3, semester);
+            s_add_sub.executeUpdate();
+            DbLoader.set_info("b_" + DbLoader.t_temp, DbLoader.cnt_sub);
+            change("添加课程" + DbLoader.cnt_sub + " (" + name + ", " + semester + ")");
+            return DbLoader.cnt_sub;
         } catch (Exception e) {
             Ctrl.raised(e);
             return -1;
@@ -78,7 +109,19 @@ public class DbCtrl {
             s_upd_stu.setInt(4, id);
             s_upd_stu.executeUpdate();
             change("修改学生" + id + "为 (" + name + ", " + number + ", " + major + ")");
+        } catch (Exception e) {
+            Ctrl.raised(e);
+            return;
+        }
+    }
 
+    public static void upd_sub(int id, String name, String semester) {
+        try {
+            s_upd_sub.setString(1, name);
+            s_upd_sub.setString(2, semester);
+            s_upd_sub.setInt(3, id);
+            s_upd_sub.executeUpdate();
+            change("修改课程" + id + "为 (" + name + ", " + semester + ")");
         } catch (Exception e) {
             Ctrl.raised(e);
             return;
@@ -96,12 +139,36 @@ public class DbCtrl {
         }
     }
 
+    public static void del_sub(int id) {
+        try {
+            s_del_sub.setInt(1, id);
+            s_del_sub.executeUpdate();
+            change("删除课程" + id);
+        } catch (Exception e) {
+            Ctrl.raised(e);
+            return;
+        }
+    }
+
     public static String sea_stu(String name, String number, String major) {
         try {// 返回可执行的sql语句，交给DbTable的render方法执行
             s_sea_stu.setString(1, name);
             s_sea_stu.setString(2, number);
             s_sea_stu.setString(3, major);
             String tmp = s_sea_stu.toString();
+            tmp = tmp.substring(tmp.indexOf(":") + 1);
+            return tmp;
+        } catch (Exception e) {
+            Ctrl.raised(e);
+            return null;
+        }
+    }
+
+    public static String sea_sub(String name, String semester) {
+        try {
+            s_sea_sub.setString(1, name);
+            s_sea_sub.setString(2, semester);
+            String tmp = s_sea_sub.toString();
             tmp = tmp.substring(tmp.indexOf(":") + 1);
             return tmp;
         } catch (Exception e) {
