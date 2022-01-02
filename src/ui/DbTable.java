@@ -75,7 +75,11 @@ public class DbTable extends JTable {
             tm.setRowCount(0);
             for (int i = 1; i <= n; ++i) {
                 String colname = reso.getColumnName(i);
-                tm.addColumn(h.get(colname) + "(" + colname + ")");
+                if (n == 5 && (i == 1 || i == 3)) {// 有两个"name"，特判区分
+                    tm.addColumn(i == 1 ? "学生名" : "课程名");
+                } else {
+                    tm.addColumn(h.get(colname));
+                }
                 ty[i] = reso.getColumnType(i);// 不判断直接全部getString也行
             }
             while (res.next()) {

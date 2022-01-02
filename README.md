@@ -357,15 +357,20 @@ create table if not exists `score` (
   - `public static int add_stu(String name, String number, String major)` 添加一个学生到临时表
   - `public static void upd_stu(int id, String name, String number, String major)` 修改一个临时表学生
   - `public static void del_stu(int id)` 删除一个学生
-  - `public static String sea_stu(String name, String number, String major)` 得到搜索学生的对应 SQL 语句
+  - `public static String sea_stu(String name, String number, String major)` 得到模糊搜索学生的对应 SQL 语句
   - `public static int add_sub(String name, String semester)` 添加一个课程到临时表
   - `public static void upd_sub(int id, String name, String semester)` 修改一个临时表课程
   - `public static void del_sub(int id)` 删除一个课程
-  - `public static String sea_sub(String name, String semester)` 得到搜索课程的对应 SQL 语句
+  - `public static String sea_sub(String name, String semester)` 得到模糊搜索课程的对应 SQL 语句
   - `public static int add_sco(int stu, int subj, int sco)` 添加一个成绩到临时表
   - `public static void upd_sco(int id, int stu, int subj, int sco) ` 修改一个临时表成绩
   - `public static void del_sco(int id)` 删除一个成绩
-  - `public static String sea_sco(String stu, String subj, String sco)` 得到搜索成绩的对应 SQL 语句
+  - `public static String sea_sco(String stu, String subj, String sco)` 得到模糊搜索成绩的对应 SQL 语句
+- `DbSearch` 成绩搜索和统计类
+  - `public static String sea_all` 查询所有成绩语句
+  - `public static String search(int min, int max, String stuname, String major, String subjname, String semester)` 得到按六个条件模糊搜索指定条件的成绩的语句
+  - `public static String stat()` 统计搜索结果
+
 
 
 
@@ -420,6 +425,11 @@ create table if not exists `score` (
 - `TbSco` 成绩数据管理的全部按钮和输入框
   - `public TbSco()`
   - `public static void upd_input(String[] s)` 更新输入框
+- `TbSearch` 成绩搜索与统计的全部按钮和输入框
+  - `public TbSearch()`
+
+
+
 
 
 
