@@ -15,7 +15,6 @@ public class DbTable extends JTable {
     private String last_cmd = "";// 上一次渲染的语句
     public static DbTable that = null;
     public static int table_idx = 0;// 当前表格编号,0学生,1课程,2成绩
-    // public static String now_row[] = null;// 最后选中的行数据
 
     public DbTable() {
         init_h();
@@ -46,6 +45,8 @@ public class DbTable extends JTable {
                     TbStu.upd_input(s);
                 } else if (table_idx == 1) {
                     TbSubj.upd_input(s);
+                } else if (table_idx == 2) {
+                    TbSco.upd_input(s);
                 }
             }
         });

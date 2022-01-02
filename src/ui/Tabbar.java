@@ -3,7 +3,6 @@ package ui;
 import javax.swing.*;
 import javax.swing.event.*;
 import base.DbLoader;
-import java.awt.*;
 
 public class Tabbar extends JTabbedPane {
     public DbTable jt = null;// 当前面板操纵的表格
@@ -14,8 +13,7 @@ public class Tabbar extends JTabbedPane {
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         addTab("学生管理", new TbStu(jt));
         addTab("课程管理", new TbSubj());
-        JPanel p_sco = new JPanel(new GridLayout(1, 1, 5, 5));
-        addTab("成绩管理", p_sco);
+        addTab("成绩管理", new TbSco());
         addTab("全局", new TbGlobal(jt));
 
         addChangeListener(new ChangeListener() {

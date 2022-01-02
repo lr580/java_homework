@@ -279,18 +279,20 @@ create table if not exists `score` (
   - `public static String encrypt(String data)`
   - `public static String password_md5(String psw)` 加盐
 - `Checker` 检验输入合法性等
+  - `public static boolean isInt(String s)` 字符串是否是整数
+  - `public static boolean isRInt(String s, int x)` 字符串是否否是大于等于 $x$ 的整数
+  - `public static boolean isPosInt(String s)` 字符串是否是正整数
+
 - `FileHelper` 文件操作类
   - `public static String read(File/String f)` 失败null
   - `public static String[] readlines(File/String f)` 失败null
   - `public static boolean write(String t, File/String f)` 失败false
   - `public static boolean writelines(String[] t, File/String f)` 失败false
   - `public static boolean touch(File/String f)` 新建文件，失败false
-
 - `SwingHelper` 简化 `Swing` 操作
   - `public static String font_size(String s, int siz) ` 得到 HTML 的 `div` 标签， `font-size:` 为 `siz`
 - `FsLabel` 设置了字体大小的 `JLabel` 
   - `public FsLabel([String s[, int siz]])`
-- 
 
 
 
@@ -356,6 +358,14 @@ create table if not exists `score` (
   - `public static void upd_stu(int id, String name, String number, String major)` 修改一个临时表学生
   - `public static void del_stu(int id)` 删除一个学生
   - `public static String sea_stu(String name, String number, String major)` 得到搜索学生的对应 SQL 语句
+  - `public static int add_sub(String name, String semester)` 添加一个课程到临时表
+  - `public static void upd_sub(int id, String name, String semester)` 修改一个临时表课程
+  - `public static void del_sub(int id)` 删除一个课程
+  - `public static String sea_sub(String name, String semester)` 得到搜索课程的对应 SQL 语句
+  - `public static int add_sco(int stu, int subj, int sco)` 添加一个成绩到临时表
+  - `public static void upd_sco(int id, int stu, int subj, int sco) ` 修改一个临时表成绩
+  - `public static void del_sco(int id)` 删除一个成绩
+  - `public static String sea_sco(String stu, String subj, String sco)` 得到搜索成绩的对应 SQL 语句
 
 
 
@@ -403,6 +413,12 @@ create table if not exists `score` (
   - `public static String get_newpath()` 从文件选择器获得一个`.sql`文件路径
 - `TbStu` 学生数据管理的全部按钮和输入框
   - `public TbStu(DbTable jt)`
+  - `public static void upd_input(String[] s)` 更新输入框
+- `TbSubj` 课程数据管理的全部按钮和输入框
+  - `public TbSubj()`
+  - `public static void upd_input(String[] s)` 更新输入框
+- `TbSco` 成绩数据管理的全部按钮和输入框
+  - `public TbSco()`
   - `public static void upd_input(String[] s)` 更新输入框
 
 
